@@ -1,11 +1,26 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { useUser } from "../../context/AuthContext";
 
 export const Signin = () => {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const { loginUser } = useUser();
 
   const togglePasswordVisibility = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const username = e.currentTarget.username.value;
+    const password = e.currentTarget.password.value;
+    const res = await loginUser(username, password);
+    console.log(res);
+    alert(res);
+    if (res === "Login successful") {
+      navigate("/");
+    }
   };
 
   return (
@@ -19,19 +34,26 @@ export const Signin = () => {
           />
           <h1 className="text-3xl font-bold mt-4">Sign In</h1>
         </div>
-        <form className="space-y-6">
+        <form
+          className="space-y-6"
+          onSubmit={(e) => {
+            handleSubmit(e);
+          }}
+        >
           <div>
-            <label className="block text-sm font-medium">Email</label>
+            <label className="block text-sm font-medium">Username</label>
             <input
-              type="email"
+              name="username"
+              type="text"
               className="w-full p-3 mt-1 text-black rounded-lg border border-gray-300 focus:outline-none focus:ring focus:border-blue-300"
-              placeholder="Enter your email"
+              placeholder="Enter your username"
             />
           </div>
           <div>
             <label className="block text-sm font-medium">Password</label>
             <div className="relative">
               <input
+                name="password"
                 type={showPassword ? "text" : "password"}
                 className="w-full p-3 mt-1 text-black rounded-lg border border-gray-300 focus:outline-none focus:ring focus:border-blue-300"
                 placeholder="Enter your password"

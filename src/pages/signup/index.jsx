@@ -1,11 +1,32 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { useUser } from "../../context/AuthContext";
 
 export const Signup = () => {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const { registerUser } = useUser();
 
   const togglePasswordVisibility = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const username = e.currentTarget.username.value;
+    const password = e.currentTarget.password.value;
+    const confirm = e.currentTarget.confirm.value;
+    if (password !== confirm) {
+      alert("passwords do not match");
+      return;
+    }
+    const res = await registerUser(username, password);
+    console.log(res);
+    alert(res);
+    if (res === "Registration successful") {
+      navigate("/signin");
+    }
   };
 
   return (
@@ -19,19 +40,21 @@ export const Signup = () => {
           />
           <h1 className="text-3xl font-bold mt-4">Sign Up</h1>
         </div>
-        <form className="space-y-6">
+        <form className="space-y-6" onSubmit={(e) => handleSubmit(e)}>
           <div>
-            <label className="block text-sm font-medium">Email</label>
+            <label className="block text-sm font-medium">Username</label>
             <input
-              type="email"
+              type="text"
+              name="username"
               className="w-full p-3 mt-1 text-black rounded-lg border border-gray-300 focus:outline-none focus:ring focus:border-blue-300"
-              placeholder="Enter your email"
+              placeholder="Enter your username"
             />
           </div>
           <div>
             <label className="block text-sm font-medium">Password</label>
             <div className="relative">
               <input
+                name="password"
                 type={showPassword ? "text" : "password"}
                 className="w-full p-3 mt-1 text-black rounded-lg border border-gray-300 focus:outline-none focus:ring focus:border-blue-300"
                 placeholder="Create a password"
@@ -51,6 +74,7 @@ export const Signup = () => {
             </label>
             <div className="relative">
               <input
+                name="confirm"
                 type={showPassword ? "text" : "password"}
                 className="w-full p-3 mt-1 text-black rounded-lg border border-gray-300 focus:outline-none focus:ring focus:border-blue-300"
                 placeholder="Confirm your password"
