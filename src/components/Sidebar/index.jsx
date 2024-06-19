@@ -50,7 +50,7 @@ const Sidebar = ({ showSidebar, setShowSidebar }) => {
             </li>
             <li className="mb-8">
               <Link
-                to="#"
+                to="/library"
                 className="flex items-center gap-4 hover:text-gray-100 transition-colors"
               >
                 <BiLibrary className="text-2xl" /> Library
@@ -66,7 +66,7 @@ const Sidebar = ({ showSidebar, setShowSidebar }) => {
             </li>
             <li>
               <Link
-                to="#"
+                to="/FavoriteSongsPage"
                 className="flex items-center gap-4 hover:text-gray-100 transition-colors"
               >
                 <RiHeartFill className="text-2xl" /> Favorite Songs

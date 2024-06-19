@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useUser } from "../../context/AuthContext";
+import { checkToken, getUserById } from "../../services/api";
 
 export const Signup = () => {
   const navigate = useNavigate();
@@ -12,17 +13,40 @@ export const Signup = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
+  const { setUser } = useUser();
+  useEffect(() => {
+    const checkUserToken = async () => {
+      const userToken = window.localStorage.getItem("spotify-user-username");
+      // console.log(userToken);
+      if (userToken) {
+        const res = await checkToken(userToken);
+        if (res !== null) {
+          const userId = res.id;
+          const user = await getUserById(userId);
+          // console.log(user);
+          setUser(user);
+          navigate("/");
+        }
+      }
+    };
+    checkUserToken();
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const username = e.currentTarget.username.value;
     const password = e.currentTarget.password.value;
     const confirm = e.currentTarget.confirm.value;
+    if (password.length < 5) {
+      alert("password should be at least 5 letters long");
+      return;
+    }
     if (password !== confirm) {
       alert("passwords do not match");
       return;
     }
     const res = await registerUser(username, password);
-    console.log(res);
+    // console.log(res);
     alert(res);
     if (res === "Registration successful") {
       navigate("/signin");
@@ -48,6 +72,8 @@ export const Signup = () => {
               name="username"
               className="w-full p-3 mt-1 text-black rounded-lg border border-gray-300 focus:outline-none focus:ring focus:border-blue-300"
               placeholder="Enter your username"
+              minLength={5}
+              maxLength={20}
             />
           </div>
           <div>
@@ -58,6 +84,8 @@ export const Signup = () => {
                 type={showPassword ? "text" : "password"}
                 className="w-full p-3 mt-1 text-black rounded-lg border border-gray-300 focus:outline-none focus:ring focus:border-blue-300"
                 placeholder="Create a password"
+                minLength={5}
+                maxLength={20}
               />
               <button
                 type="button"
@@ -78,6 +106,8 @@ export const Signup = () => {
                 type={showPassword ? "text" : "password"}
                 className="w-full p-3 mt-1 text-black rounded-lg border border-gray-300 focus:outline-none focus:ring focus:border-blue-300"
                 placeholder="Confirm your password"
+                minLength={5}
+                maxLength={20}
               />
               <button
                 type="button"

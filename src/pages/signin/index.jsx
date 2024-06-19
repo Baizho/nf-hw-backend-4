@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useUser } from "../../context/AuthContext";
+import { checkToken, getUserById } from "../../services/api";
 
 export const Signin = () => {
   const navigate = useNavigate();
@@ -11,12 +12,31 @@ export const Signin = () => {
   const togglePasswordVisibility = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
+  const { setUser } = useUser();
+  useEffect(() => {
+    const checkUserToken = async () => {
+      const userToken = window.localStorage.getItem("spotify-user-username");
+      // console.log(userToken);
+      if (userToken !== null) {
+        const res = await checkToken(userToken);
+        if (res.data.response !== null) {
+          const userId = res.data.response.id;
+          // console.log(userId);
+          const user = await getUserById(userId);
+          // console.log(user.data);
+          setUser(user.data);
+          navigate("/");
+        }
+      }
+    };
+    checkUserToken();
+  }, []);
   const handleSubmit = async (e) => {
     e.preventDefault();
     const username = e.currentTarget.username.value;
     const password = e.currentTarget.password.value;
     const res = await loginUser(username, password);
-    console.log(res);
+    // console.log(res);
     alert(res);
     if (res === "Login successful") {
       navigate("/");

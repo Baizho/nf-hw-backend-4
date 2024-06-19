@@ -22,6 +22,7 @@ const useSong = () => {
 
 const SongProvider = ({ children }) => {
   const [songs, setSongs] = useState([basic]);
+  const [curSong, setCurSong] = useState(basic);
 
   const addSong = async (name, artist, song, img) => {
     console.log("adding a song");
@@ -38,8 +39,12 @@ const SongProvider = ({ children }) => {
     }
   };
 
+  const playSong = async (song) => {
+    console.log("playing the song ", song.name);
+    setCurSong(song);
+  };
   return (
-    <SongContext.Provider value={{ songs, addSong }}>
+    <SongContext.Provider value={{ songs, addSong, curSong, playSong }}>
       {children}
     </SongContext.Provider>
   );

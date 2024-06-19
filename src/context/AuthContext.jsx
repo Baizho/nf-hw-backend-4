@@ -14,6 +14,8 @@ const basic = {
   id: "",
   username: "",
   img: "https://ik.imagekit.io/8cs4gpobr/spotify/users/default.jpg",
+  likedSongs: [],
+  playlists: [],
   token: "",
   refreshToken: "",
 };
@@ -38,10 +40,16 @@ const AuthProvider = ({ children }) => {
         username: username,
         password: password,
       });
+      window.localStorage.setItem("spotify-user-username", null);
       return res.data.message;
     } catch (err) {
       return err.response.data.message;
     }
+  };
+
+  const Logout = () => {
+    setUser(basic);
+    window.localStorage.setItem("spotify-user-username", null);
   };
 
   const loginUser = async (username, password) => {
@@ -52,13 +60,18 @@ const AuthProvider = ({ children }) => {
         password: password,
       });
       const data = res.data.result;
+      // console.log(data);
       setUser({
         id: data.user._id,
         username: data.user.username,
         img: "https://ik.imagekit.io/8cs4gpobr/spotify/users/default.jpg",
+        likedSongs: data.likedSongs,
+        playlists: data.playlists,
         token: data.accessToken,
         refreshToken: data.refreshToken,
       });
+      // console.log(data.accessToken);
+      window.localStorage.setItem("spotify-user-username", data.accessToken);
       return res.data.message;
     } catch (err) {
       return err.response.data.message;
@@ -66,7 +79,9 @@ const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, registerUser, loginUser }}>
+    <AuthContext.Provider
+      value={{ user, setUser, registerUser, loginUser, Logout }}
+    >
       {children}
     </AuthContext.Provider>
   );
