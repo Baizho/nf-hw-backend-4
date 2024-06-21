@@ -27,7 +27,7 @@ const SongProvider = ({ children }) => {
   const addSong = async (name, artist, song, img) => {
     console.log("adding a song");
     try {
-      const res = await axios.post(`${SERVER_URL}` + "/addSong", {
+      const res = await axios.post(`${SERVER_URL}` + "/songs/add", {
         name: name,
         artist: artist,
         song: song,

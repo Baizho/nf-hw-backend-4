@@ -78,9 +78,23 @@ const AuthProvider = ({ children }) => {
     }
   };
 
+  const createPlaylist = async (title) => {
+    console.log("creating playlist");
+    try {
+      const response = await axios.post(`${SERVER_URL}` + "/playlists/create", {
+        username: user.username,
+        name: title,
+      });
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.log("error creating playlist", error);
+    }
+  };
+
   return (
     <AuthContext.Provider
-      value={{ user, setUser, registerUser, loginUser, Logout }}
+      value={{ user, setUser, registerUser, loginUser, Logout, createPlaylist }}
     >
       {children}
     </AuthContext.Provider>

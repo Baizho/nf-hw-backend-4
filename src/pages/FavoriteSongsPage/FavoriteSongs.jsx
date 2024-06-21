@@ -4,6 +4,8 @@ import { useSong } from "../../context/SongContext";
 import { useNavigate } from "react-router-dom";
 import PlayerBar from "../../components/PlayerBar";
 import { getLikedSongs, unlikeSong } from "../../services/api";
+import { RiHeartFill } from "react-icons/ri";
+import { RiHeartLine } from "react-icons/ri";
 
 const FavoriteSongs = () => {
   const { user } = useUser();
@@ -36,6 +38,7 @@ const FavoriteSongs = () => {
 
   useEffect(() => {
     if (user.username === "") {
+      alert("sign in first");
       navigate("/signin");
     }
     fetchLikedSongs();
@@ -69,24 +72,26 @@ const FavoriteSongs = () => {
               alt={song.name}
               className="w-16 h-16 rounded mr-4"
             />
-            <div>
-              <h2 className="text-xl font-semibold">{song.name}</h2>
-              <p className="text-gray-400">{song.artist}</p>
+            <div className="w-full">
+              <h2 className="text-xl font-semibold w-full">{song.name}</h2>
+              <p className="text-gray-400 w-full">{song.artist}</p>
             </div>
-            <button
-              onClick={() => {
-                playSong(song);
-              }}
-              className="bg-green-500 hover:bg-green-600 text-white mx-4 py-2 rounded mt-2"
-            >
-              Play
-            </button>
-            <button
-              onClick={() => handleUnlikeSong(song._id)}
-              className="bg-red-500 hover:bg-red-600 text-white mx-4 py-2 rounded mt-2"
-            >
-              Delete
-            </button>
+            <div className="flex items-center justify-between w-full">
+              <button
+                onClick={() => {
+                  playSong(song);
+                }}
+                className="bg-green-700 hover:bg-green-800 text-gray-300 mx-4 py-2 rounded mt-2 w-16 h-10"
+              >
+                Play
+              </button>
+              <button
+                onClick={() => handleUnlikeSong(song._id)}
+                className="flex items-center h-10 mr-4"
+              >
+                <RiHeartFill className="text-2xl" />
+              </button>
+            </div>
           </div>
         ))}
       </div>

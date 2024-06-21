@@ -5,6 +5,8 @@ import { Signin } from "../pages/signin";
 import ParentProviders from "../ParentProviders";
 import { FavoriteSongsPage } from "../pages/FavoriteSongsPage";
 import { LibraryPage } from "../pages/LibraryPage";
+import { CreateSongPage } from "../pages/CreateSongPage";
+import { CreatePlaylistPage } from "../pages/CreatePlaylistPage";
 export const RouteList = () => {
   return (
     <ParentProviders>
@@ -14,6 +16,8 @@ export const RouteList = () => {
         <Route path="/signin" element={<Signin />} />
         <Route path="/FavoriteSongsPage" element={<FavoriteSongsPage />} />
         <Route path="/library" element={<LibraryPage />} />
+        <Route path="/createSong" element={<CreateSongPage />} />
+        <Route path="/createPlaylist" element={<CreatePlaylistPage />} />
       </Routes>
     </ParentProviders>
   );

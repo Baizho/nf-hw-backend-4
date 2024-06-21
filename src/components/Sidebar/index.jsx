@@ -58,7 +58,15 @@ const Sidebar = ({ showSidebar, setShowSidebar }) => {
             </li>
             <li>
               <Link
-                to="#"
+                to="/createSong"
+                className="flex items-center gap-4 hover:text-gray-100 transition-colors"
+              >
+                <RiAddBoxLine className="text-2xl" /> Create a song
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/createPlaylist"
                 className="flex items-center gap-4 hover:text-gray-100 transition-colors"
               >
                 <RiAddBoxLine className="text-2xl" /> Create a Playlist
